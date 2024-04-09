@@ -6,6 +6,7 @@ Created on Mon Feb 12 16:13:57 2024
 """
 from heapq import heapify, heappop, heappush
 import numpy as np
+from Crypto.Util.number import *
 
 def DNA_to_AA(DNA_sequence):
     genetic_code = { 
@@ -139,8 +140,16 @@ def get_entropy(seq):
         entropy += - np.log2(v)*v
     print("Entropy per symbol: ", entropy)
 
+def to_binary(seq, Huff_seq):
+    encoded_seq = ""
+    for k in seq:
+        code = Huff_seq[k]
+        encoded_seq+=code
+    return encoded_seq
 
 
+
+# DNA SEQUENCE
 root = Huffman(occ_DNA)
 #print_tree(root)
 
@@ -149,7 +158,13 @@ print(codes)
 get_entropy(occ_DNA)
 get_avg(codes)
 
+seq = to_binary(DNA_seq, codes)
+with open("DNA.bin", "wb") as f:
+    f.write(long_to_bytes(int(seq,2)))
 
+
+
+# CODON SEQUENCE
 root = Huffman(occ_codon)
 #print_tree(root)
 
@@ -158,6 +173,12 @@ print(codes)
 get_entropy(occ_codon)
 get_avg(codes)
 
+seq = to_binary(codon_seq, codes)
+with open("codon.bin", "wb") as f:
+    f.write(long_to_bytes(int(seq,2)))
+
+
+# AA SEQUENCE
 root = Huffman(occ_AA)
 #print_tree(root)
 
@@ -165,14 +186,15 @@ codes = visit_node(root)
 print(codes)
 get_entropy(occ_AA)
 get_avg(codes)
-  
+
+seq = to_binary(AA_seq, codes)
+with open("AA.bin", "wb") as f:
+    f.write(long_to_bytes(int(seq,2)))
 
 
 
-def to_binary(seq, Huff_seq):
   
-    encoded_seq = ...
-  
-    return encoded_seq
+
+
 
 
